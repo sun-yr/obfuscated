@@ -17,25 +17,25 @@ describe Obfuscated do
     @comment = Comment.create(:post_id => @post.id)
   end
 
-  it "has find_by_hashed_id method" do
-    Post.respond_to?(:find_by_hashed_id).should == true
+  it "has find_by_obfuscated_id method" do
+    Post.respond_to?(:find_by_obfuscated_id).should == true
   end
 
   it "has a 12 digit hashed id" do
-    @post.hashed_id.should be_a String
-    @post.hashed_id.length.should == 12
+    @post.obfuscated_id.should be_a String
+    @post.obfuscated_id.length.should == 12
   end
 
   it "overwrites to_param" do
-    @post.to_param.should == @post.hashed_id
+    @post.to_param.should == @post.obfuscated_id
   end
 
   it "can be found with a hashed id" do
-    Post.find_by_hashed_id( @post.hashed_id ).should == @post
+    Post.find_by_obfuscated_id( @post.obfuscated_id ).should == @post
   end
 
   it "can be found using the default find() method" do
-    Post.find( @post.hashed_id ).should == @post
+    Post.find( @post.obfuscated_id ).should == @post
   end
 
   it "can be found using the default find() method and normal id" do
@@ -43,7 +43,7 @@ describe Obfuscated do
   end
 
   it "can find using active relation" do
-    Post.includes(:comments).find_by_hashed_id( @post.hashed_id ).should == @post
+    Post.includes(:comments).find_by_obfuscated_id( @post.obfuscated_id ).should == @post
   end
 
 end

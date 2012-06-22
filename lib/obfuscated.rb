@@ -18,11 +18,11 @@ module Obfuscated
     def find( *primary_key )
       # Sale.find( '7e2d2c4da1b0' )
       if primary_key.is_a?(String) && primary_key.length == 12
-        find_by_hashed_id( primary_key )
+        find_by_obfuscated_id( primary_key )
 
       # Sale.includes(:store).find( '7e2d2c4da1b0' )
       elsif primary_key.is_a?(Array) && primary_key.length == 1 && primary_key[0].is_a?(String) && primary_key[0].length == 12
-        find_by_hashed_id( primary_key[0] )
+        find_by_obfuscated_id( primary_key[0] )
 
       # Other queries
       else
@@ -38,7 +38,7 @@ module Obfuscated
         include Obfuscated::InstanceMethods
 
         # Uses an 12 character string to find the appropriate record
-        def self.find_by_hashed_id( hash, options={} )
+        def self.find_by_obfuscated_id( hash, options={} )
           # Don't bother if there's no hash provided.
           return nil if hash.blank?
           
@@ -58,20 +58,20 @@ module Obfuscated
   
   module InstanceMethods
     # Generate an obfuscated 12 character id incorporating the primary key and the table name.
-    def hashed_id
+    def obfuscated_id
       raise 'This record does not have a primary key yet!' if id.blank?
       
       # If Obfuscated isn't supported, just return the normal id
       return id unless Obfuscated::supported?
       
       # Use SHA1 to generate a consistent hash based on the id and the table name
-      @hashed_id ||= Digest::SHA1.hexdigest(
+      @obfuscated_id ||= Digest::SHA1.hexdigest(
         "---#{id}-WICKED-#{self.class.table_name}-#{Obfuscated::obfuscated_salt}"
       )[0..11]  
     end
 
     #def to_param
-      #hashed_id
+      #obfuscated_id
     #end
   end
 end
