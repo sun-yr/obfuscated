@@ -8,5 +8,5 @@ Gem::Specification.new do |s|
   s.email       = "github@joncollier.com"
   s.files       = ["lib/obfuscated.rb"]
   s.homepage    = "https://github.com/imnotquitejack/obfuscated"
-  s.add_dependency 'activerecord', '>= 2.3.0'
+  s.add_dependency 'activerecord', '>= 3.2.22'
 end
